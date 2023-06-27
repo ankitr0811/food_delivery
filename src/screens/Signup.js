@@ -1,44 +1,41 @@
-import React ,{useState}from 'react'
-import { Link, Navigate } from 'react-router-dom';
+import React ,{useState} from 'react'
+import { Link } from 'react-router-dom';
+//import ionRangeSlider from 'ion-rangeslider'
 
-export default function Login() {
-  const [credentials, setCredentials] = useState({ email:"", password:""})
+export default function Signup() {
+  const [credentials, setCredentials] = useState({name:"", email:"", password:""})
 
   const handleSubmit = async(e) =>{
     //e.preventDefault()
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/creatuser",{
+    const response = await fetch("http://localhost:5000/api/auth/creatuser",{
     method:'POST',
     headers:{
       'content-Type ':'application/json'
     },
-    body:JSON.stringify({ email:credentials.email,password:credentials.password})
+    body:JSON.stringify({name:credentials.name, email:credentials.email,password:credentials.password})
     });
     const json= await response.json()
     console.log(json);
     if(!json.success){
       alert("enetr va;id credentials")
     }
-    if(json.success){
-      localStorage.setItem("authToken", json.authToken);
-      console.log(localStorage.getItem("authToken"));
-      Navigate("/");
-    }
  
   }
   const onChange=(event)=>{
     setCredentials({...credentials,[event.target.name]:event.target.value})
 
-  }   
-
+  } 
   return (
     <>
     
     <div className='container'>
-  <form onSubmit={handleSubmit}>
+<form onSubmit={handleSubmit}>
+<div className="mb-3">
+    <label htmlfor="name" className="form-label">Name</label>
+    <input type="text" className="form-control" name='name' value={credentials.name} onChange={onChange} />
    
-   
-  
+  </div>
   <div className="mb-3">
     <label htmlfor="exampleInputEmail1" className="form-label">Email address</label>
     <input type="email" className="form-control" name='email' value={credentials.email} onChange={onChange}  id="exampleInputEmail1" aria-describedby="emailHelp"/>
@@ -50,12 +47,12 @@ export default function Login() {
   </div>
  
   <button type="submit" className=" m-3 btn btn-primary">Submit</button> 
-  <Link to="/creatuser" className='m-3 btn btn-danfer'>i am a new USER</Link>
+  <Link to="/login" className='m-3 btn btn-danfer'>ALREADY USER</Link>
   
 </form>
 </div>
  
     
- </>
+    </>
   )
 }
